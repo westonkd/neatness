@@ -12,7 +12,7 @@ bool useStarAndBlank = true;
 /*******************************************************************
  * A class that represents a Wire with a current and a new boolean
  * value.  The new value is set by the operation of a Cell, and it
-* will become the current value after being updated, which typically
+ * will become the current value after being updated, which typically
  * happens right before showing (outputting) the value.
  *******************************************************************/
 
@@ -344,7 +344,7 @@ int main(int argc, char* argv[])
     // if less than one argument, show usage
     if (argc <= 1)
     {
-        cout << "Usage: " << argv[0] << " function [numCells] [numSteps]" << endl;
+        cout << "Usage: " << argv[0] << " [starting function][numCells][numSteps][showStars]" << endl;
         return 0;
     }
     
@@ -366,44 +366,61 @@ int main(int argc, char* argv[])
     
     // TODO: get program input another (better?) way.
     
-    
-    // TODO: create numCells Wires.
-    Wire * wires = new Wire[numCells];
-    
-    // TODO: set to true the new value of the middle-most Wire
-    //       (the middle of the whole array, *NOT* the middle wire of each cell).
-    
-    wires[numCells/2].setValue(true);
-    
-    // TODO: update values to new values and show (output) all Wires.
-    for (int i = 0; i < numCells; i++)
+    //loop through every combination
+    for (int funcNum = 0; funcNum < 255; funcNum++)
     {
-        //wires[i].setValueToNew();
-        cout << wires[i];
-    }
-    cout << endl;
-    
-    // TODO: create a BooleanFunction3 given the booleanFunctionNumber.
-    BooleanFunction3* boolFunc = new BooleanFunction3();
-    boolFunc->populate(booleanFunctionNumber);
-    
-    // TODO: iterate A and B for numSteps steps.
-    for (int step = 0; step < numSteps - 1; ++step)
-    {
-        // TODO: A) create the network of Cells implementing the BooleanFunction3
-        //          and connect them to the numCells Wires, as per the write-up.
-        for (int i = 1; i < numCells - 1; ++i)
-            Cell (wires[i + 1], wires[i], wires[i - 1], boolFunc);
-        
-        // TODO: B) update values to new values and show (output) all wires.
-        for (int i = 0; i < numCells; ++i)
+        ofstream fout;
+        fout.open(to_string(funcNum) + ".tbl");
+        if (fout.fail())
         {
-            wires[i].setValueToNew();
-            cout << wires[i];
+            cerr << "Error writting file " << funcNum << ".tbl";
+            break;
         }
-        cout << endl;
+        
+        // TODO: create numCells Wires.
+        Wire * wires = new Wire[numCells];
+        
+        // TODO: set to true the new value of the middle-most Wire
+        //       (the middle of the whole array, *NOT* the middle wire of each cell).
+        
+        wires[numCells/2].setValue(true);
+        
+        // TODO: update values to new values and show (output) all Wires.
+        for (int i = 0; i < numCells; i++)
+        {
+            //wires[i].setValueToNew();
+            fout << wires[i];
+        }
+        fout << endl;
+        
+        // TODO: create a BooleanFunction3 given the booleanFunctionNumber.
+        BooleanFunction3* boolFunc = new BooleanFunction3();
+        boolFunc->populate(funcNum);
+        
+        // TODO: iterate A and B for numSteps steps.
+        for (int currentStep = 0; currentStep < numSteps - 1; currentStep++)
+        {
+            // TODO: A) create the network of Cells implementing the BooleanFunction3
+            //          and connect them to the numCells Wires, as per the write-up.
+            for (int i = 1; i < numCells - 1; i++)
+                Cell (wires[i + 1], wires[i], wires[i - 1], boolFunc);
+            
+            // TODO: B) update values to new values and show (output) all wires.
+            for (int i = 0; i < numCells; i++)
+            {
+                wires[i].setValueToNew();
+                fout << wires[i];
+            }
+            fout << endl;
+        }
+        
+        //delete dynanically allocated vars
+        delete[] wires;
+        delete boolFunc;
+        
+        //close file out stream
+        fout.close();
     }
     
-    delete wires;
     return 0;
 }
