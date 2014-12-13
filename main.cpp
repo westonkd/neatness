@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <bitset>
 using namespace std;
 
 bool useStarAndBlank = true;
@@ -344,17 +345,17 @@ int main(int argc, char* argv[])
     // if less than one argument, show usage
     if (argc <= 1)
     {
-        cout << "Usage: " << argv[0] << " [starting function][numCells][numSteps][showStars]" << endl;
+        cout << "Usage: " << argv[0] << " [binary filenames][numCells][numSteps][showStars]" << endl;
         return 0;
     }
     
-    int booleanFunctionNumber = 0;
     int numCells = 100;
     int numSteps = numCells;
+    bool useBinFileNames = false;
     
     if (argc > 1)
     {
-        booleanFunctionNumber = atoi(argv[1]);
+        useBinFileNames = atoi(argv[1]) == 0 ? false : true;
         
         if (argc > 2)
             numCells = atoi(argv[2]);
@@ -370,7 +371,7 @@ int main(int argc, char* argv[])
     for (int funcNum = 0; funcNum < 255; funcNum++)
     {
         ofstream fout;
-        fout.open(to_string(funcNum) + ".tbl");
+        fout.open((useBinFileNames ? bitset<8>(funcNum).to_string() : to_string(funcNum)) + ".tbl");
         if (fout.fail())
         {
             cerr << "Error writting file " << funcNum << ".tbl";
