@@ -1,3 +1,9 @@
+/******************************************************************
+ * Weston Dransfield
+ * Exploration 5
+ * Brother Neff
+ *****************************************************************/
+
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
@@ -16,86 +22,51 @@ bool useStarAndBlank = true;
  * will become the current value after being updated, which typically
  * happens right before showing (outputting) the value.
  *******************************************************************/
-
 class Wire
-
 {
-    
 private:
-    
     bool mValue;
-    
     bool mNewValue;
-    
-    
-    
 public:
-    
     /****************************************************************
      
      * Constructs a new wire instance with a default value (false).
      
-     ****************************************************************/
-    
+     ***************************************************************/
     Wire()
-    
     {
-        
         setValue(false);
-        
         setNewValue(false);
-        
     }
-    
-    
-    
     /****************************************************************
      
      * Constructs a new wire instance with a given value.
      
      ****************************************************************/
-    
     Wire(bool pValue)
-    
     {
-        
         setValue(pValue);
-        
         setNewValue(false);
-        
     }
-    
-    
-    
     /******************************
      
      * Gets this wire's value.
      
      *******************************/
-    
     bool getValue() const { return mValue; }
-    
-    
-    
     /******************************
      
      * Gets this wire's new value.
      
      *******************************/
-    
     bool getNewValue() const { return mNewValue; }
-    
-    
     
     /******************************
      
      * Sets this wire's value.
      
      *******************************/
-    
     void setValue(bool pValue) { mValue = pValue; }
-    
-    
     
     /******************************
      
@@ -105,8 +76,6 @@ public:
     
     void setNewValue(bool pNewValue) { mNewValue = pNewValue; }
     
-    
-    
     /******************************
      
      * Sets this wire's value to its new value.
@@ -115,49 +84,31 @@ public:
     
     void setValueToNew() { mValue = mNewValue; }
     
-    
-    
     /****************************************************
      
      * Gets the character representing this wire's value.
      
      ****************************************************/
-    
     char getCharacterRepresentingValue() const
-    
     {
-        
         return
-        
         ((useStarAndBlank) ?
-         
          (getValue() ? '*' : ' ') :
-         
          (getValue() ? '1' : '0'));
-        
     }
     
 };
-
-
 
 /****************************************************************
  
  * Outputs a Wire.
  
  ****************************************************************/
-
 ostream& operator<<(ostream& os, const Wire& w)
-
 {
-    
     os << w.getCharacterRepresentingValue();
-    
     return os;
-    
 }
-
-
 
 /****************************************************************
  
@@ -166,43 +117,23 @@ ostream& operator<<(ostream& os, const Wire& w)
  ****************************************************************/
 
 class BooleanFunction3
-
 {
-    
 protected:
-    
-    
-    
-    
-    
-public:
-    
     bool mValues[8];
     
+public:
     BooleanFunction3()
-    
     {
-        
         for (int i = 0; i < 8; i++)
-            
         {
-            
             mValues[i] = false;
-            
         }
-        
     }
     
-    
-    
     bool evaluate(bool p1, bool p2, bool p3)
-    
     {
-        
         int i = 0;
-        
         if (p3)
-            
         {
             
             i |= 1;
@@ -229,42 +160,25 @@ public:
         
     }
     
-    
-    
     void populate(int values)
-    
     {
-        
         int i = 0;
-        
         while (values > 0)
-            
         {
-            
             mValues[i++] = ((values & 1) == 1);
-            
             values /= 2;
-            
         }
-        
     }
-    
 };
-
-
 
 /****************************************************************
  
  * A Cell implementing a boolean function of degree 3.
  
  ****************************************************************/
-
 class Cell
-
 {
-    
 protected:
-    
     BooleanFunction3* mBooleanFunction3;
     
     
@@ -322,15 +236,10 @@ public:
      * Sets the pointer to the Boolean Function of degree 3.
      
      ****************************************************************/
-    
     void setBooleanFunction3(BooleanFunction3* pBooleanFunction3)
-    
     {
-        
         mBooleanFunction3 = pBooleanFunction3;
-        
     }
-    
 };
 
 
@@ -378,15 +287,15 @@ int main(int argc, char* argv[])
             break;
         }
         
-        // TODO: create numCells Wires.
+        //create numCells Wires.
         Wire * wires = new Wire[numCells];
         
-        // TODO: set to true the new value of the middle-most Wire
+        //set to true the new value of the middle-most Wire
         //       (the middle of the whole array, *NOT* the middle wire of each cell).
         
         wires[numCells/2].setValue(true);
         
-        // TODO: update values to new values and show (output) all Wires.
+        //update values to new values and show (output) all Wires.
         for (int i = 0; i < numCells; i++)
         {
             //wires[i].setValueToNew();
@@ -394,19 +303,19 @@ int main(int argc, char* argv[])
         }
         fout << endl;
         
-        // TODO: create a BooleanFunction3 given the booleanFunctionNumber.
+        //create a BooleanFunction3 given the booleanFunctionNumber.
         BooleanFunction3* boolFunc = new BooleanFunction3();
         boolFunc->populate(funcNum);
         
-        // TODO: iterate A and B for numSteps steps.
+        //iterate A and B for numSteps steps.
         for (int currentStep = 0; currentStep < numSteps - 1; currentStep++)
         {
-            // TODO: A) create the network of Cells implementing the BooleanFunction3
+            //create the network of Cells implementing the BooleanFunction3
             //          and connect them to the numCells Wires, as per the write-up.
             for (int i = 1; i < numCells - 1; i++)
                 Cell (wires[i + 1], wires[i], wires[i - 1], boolFunc);
             
-            // TODO: B) update values to new values and show (output) all wires.
+            // update values to new values and show (output) all wires.
             for (int i = 0; i < numCells; i++)
             {
                 wires[i].setValueToNew();

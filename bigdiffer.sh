@@ -11,7 +11,7 @@ fi
 echo processing equivilent functions
 rm results.txt *.tbl *.fnl
 
-./a.out 0 75 75 0
+./a.out 0 50 50 0
 
 touch results.txt
 
@@ -28,6 +28,7 @@ for i in *.tbl; do
                             echo "moving $FIRST and $SECOND"
                             mv $i "$FIRST and $SECOND.fnl"
                             echo "$FIRST <----> $SECOND" >> results.txt
+   
                             rm $i $j
                             break
                     fi
